@@ -89,6 +89,4 @@ We follow the [Conventional Commits specification](https://www.conventionalcommi
 
 ## 💬 Getting Help
 
-If you have questions or need assistance, feel free to open a Discussion on GitHub or reach out to the core engineering team at `engineeringstudies5@gmail.com`.
-
-Happy coding! जय जवान, जय किसान!
+If you have questions or need assistance, feel free to open a Discussion on GitHub or reach out to the core engineer team
