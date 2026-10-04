@@ -284,4 +284,3 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more informa
 - **Issue Tracker**: [GitHub Issues](https://github.com/your-username/kisanmitra-agri-marketplace/issues)
 - **Email Contact**: `engineeringstudies5@gmail.com`
 
-*Dedicated to the hardworking farmers of India (जय जवान, जय किसान).*
