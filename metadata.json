@@ -1,0 +1,6 @@
+{
+  "name": "KisanMitra - Agri Marketplace & Logistics",
+  "description": "Digital marketplace connecting farmers, FPOs, and bulk buyers with AI crop recommendation engine, soil health analytics, demand forecasting, logistics route optimization, and multilingual voice assistance.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,119 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "Registered Farmer, FPO, or Mart Buyer profile",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "format": "email", "maxLength": 120 },
+        "role": { "type": "string", "enum": ["farmer", "mart"] },
+        "phone": { "type": "string", "maxLength": 30 },
+        "farmOrMartName": { "type": "string", "maxLength": 120 },
+        "state": { "type": "string", "maxLength": 80 },
+        "isVerified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "role"]
+    },
+    "produceListing": {
+      "title": "Produce Listing",
+      "description": "Farmer or FPO crop produce available for bulk purchase",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "sellerId": { "type": "string", "maxLength": 128 },
+        "sellerName": { "type": "string", "maxLength": 100 },
+        "sellerType": { "type": "string", "enum": ["Farmer", "FPO Cooperative", "Organic Cluster"] },
+        "cropName": { "type": "string", "maxLength": 100 },
+        "cropCategory": { "type": "string", "enum": ["all", "exotic", "fruits", "vegetables", "grains", "spices", "organic"] },
+        "variety": { "type": "string", "maxLength": 80 },
+        "availableQtyTons": { "type": "number" },
+        "expectedPricePerKg": { "type": "number" },
+        "location": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["active", "sold"] },
+        "isOrganic": { "type": "boolean" },
+        "activeBidsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "sellerId", "cropName", "availableQtyTons", "expectedPricePerKg"]
+    },
+    "bulkDemand": {
+      "title": "Bulk Buyer Demand",
+      "description": "Procurement requirement posted by Supermarket, Mart, or Exporter",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "buyerId": { "type": "string", "maxLength": 128 },
+        "companyName": { "type": "string", "maxLength": 120 },
+        "requiredCrop": { "type": "string", "maxLength": 100 },
+        "neededQtyTons": { "type": "number" },
+        "offeredPricePerKg": { "type": "number" },
+        "deliveryLocation": { "type": "string", "maxLength": 120 },
+        "paymentTerms": { "type": "string", "maxLength": 100 },
+        "urgency": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "enum": ["active", "fulfilled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "buyerId", "companyName", "requiredCrop", "neededQtyTons", "offeredPricePerKg"]
+    },
+    "farmParcel": {
+      "title": "Farm Parcel & Field Geolocation",
+      "description": "Geospatial agricultural field coordinates and soil characteristics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "parcelName": { "type": "string", "maxLength": 100 },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "areaAcres": { "type": "number" },
+        "cropType": { "type": "string", "maxLength": 80 },
+        "soilType": { "type": "string", "maxLength": 80 },
+        "phLevel": { "type": "number" },
+        "irrigation": { "type": "string", "maxLength": 80 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "ownerId", "parcelName", "lat", "lng", "areaAcres"]
+    },
+    "slideDeck": {
+      "title": "Google Slides Presentation Metadata",
+      "description": "Generated pitch decks and crop advisories saved to Google Slides",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "presentationId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 200 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "slideCount": { "type": "number" },
+        "presentationUrl": { "type": "string", "maxLength": 255 },
+        "deckType": { "type": "string", "enum": ["crop_advisory", "buyer_procurement", "yield_pitch"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "presentationId", "title", "ownerId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/user" },
+      "description": "Stores user profiles with UID isolation"
+    },
+    "/produceListings/{listingId}": {
+      "schema": { "$ref": "#/entities/produceListing" },
+      "description": "Farmer marketplace produce offerings"
+    },
+    "/bulkDemands/{demandId}": {
+      "schema": { "$ref": "#/entities/bulkDemand" },
+      "description": "Corporate Mart & Exporter procurement demands"
+    },
+    "/farmParcels/{parcelId}": {
+      "schema": { "$ref": "#/entities/farmParcel" },
+      "description": "Geospatial farm field locations and sensor markers"
+    },
+    "/slideDecks/{deckId}": {
+      "schema": { "$ref": "#/entities/slideDeck" },
+      "description": "Metadata for Google Slides presentations generated by users"
+    }
+  }
+}

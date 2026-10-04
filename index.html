@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      // Ignore Vite HMR WebSocket connection warnings in AI Studio preview iframe
+      (function() {
+        var origConsoleError = console.error;
+        console.error = function() {
+          var args = Array.prototype.slice.call(arguments);
+          var msg = args.map(function(a) {
+            return typeof a === 'string' ? a : (a && a.message) || '';
+          }).join(' ');
+          if (msg.indexOf('[vite]') !== -1 && (msg.indexOf('websocket') !== -1 || msg.indexOf('WebSocket') !== -1 || msg.indexOf('connect') !== -1)) {
+            return;
+          }
+          if (msg.indexOf('vite-plugin-pwa') !== -1) {
+            return;
+          }
+          if (msg.indexOf('[GSI_LOGGER]') !== -1 || msg.indexOf('Failed to open popup window') !== -1) {
+            return;
+          }
+          return origConsoleError.apply(console, arguments);
+        };
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KisanMitra - Agri Marketplace & Logistics</title>
+    <meta name="description" content="Digital marketplace connecting farmers, FPOs, and bulk buyers with AI crop recommendation engine, soil health analytics, demand forecasting, logistics route optimization, and multilingual voice assistance." />
+    <meta property="og:title" content="KisanMitra - Agri Marketplace & Logistics" />
+    <meta property="og:description" content="Digital marketplace connecting farmers, FPOs, and bulk buyers with AI crop recommendation engine, soil health analytics, demand forecasting, logistics route optimization, and multilingual voice assistance." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#15803d" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KisanMitra" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body class="bg-[#050706] text-[#E5E9E7] antialiased selection:bg-[#C2D66E] selection:text-[#0F1411] min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

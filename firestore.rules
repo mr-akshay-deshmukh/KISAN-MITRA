@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation for User Profile
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() <= 128 &&
+             data.name is string && data.name.size() <= 100 &&
+             data.role in ['farmer', 'mart'] &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 120)) &&
+             (!('farmOrMartName' in data) || (data.farmOrMartName is string && data.farmOrMartName.size() <= 120));
+    }
+
+    // Validation for Produce Listing
+    function isValidListing(data) {
+      return data.id is string && data.id.size() <= 64 &&
+             data.sellerId is string && data.sellerId == request.auth.uid &&
+             data.cropName is string && data.cropName.size() <= 100 &&
+             data.availableQtyTons is number && data.availableQtyTons >= 0 &&
+             data.expectedPricePerKg is number && data.expectedPricePerKg >= 0;
+    }
+
+    // Validation for Bulk Demand
+    function isValidDemand(data) {
+      return data.id is string && data.id.size() <= 64 &&
+             data.buyerId is string && data.buyerId == request.auth.uid &&
+             data.companyName is string && data.companyName.size() <= 120 &&
+             data.requiredCrop is string && data.requiredCrop.size() <= 100 &&
+             data.neededQtyTons is number && data.neededQtyTons > 0 &&
+             data.offeredPricePerKg is number && data.offeredPricePerKg > 0;
+    }
+
+    // Validation for Farm Parcel
+    function isValidParcel(data) {
+      return data.id is string && data.id.size() <= 64 &&
+             data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.parcelName is string && data.parcelName.size() <= 100 &&
+             data.lat is number && data.lng is number &&
+             data.areaAcres is number && data.areaAcres > 0;
+    }
+
+    // Validation for Slide Deck metadata
+    function isValidSlideDeck(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.presentationId is string && data.presentationId.size() <= 128 &&
+             data.title is string && data.title.size() <= 200 &&
+             data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    // Users collection rules
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming()) && incoming().uid == userId;
+      allow update: if isOwner(userId) && isValidUser(incoming()) &&
+                    incoming().uid == existing().uid &&
+                    incoming().diff(existing()).affectedKeys().hasOnly(['name', 'phone', 'farmOrMartName', 'state', 'isVerified', 'role']);
+      allow delete: if false;
+    }
+
+    // Produce Listings collection rules
+    match /produceListings/{listingId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isSignedIn() && isValidId(listingId) && isValidListing(incoming());
+      allow update: if isSignedIn() && isValidListing(incoming()) && (
+        // Seller editing their listing
+        (existing().sellerId == request.auth.uid && incoming().sellerId == existing().sellerId) ||
+        // Buyer bidding or incrementing activeBidsCount
+        (incoming().diff(existing()).affectedKeys().hasOnly(['activeBidsCount', 'highestBidPerKg', 'isMarkedByBuyer', 'markedByBuyersCount']))
+      );
+      allow delete: if isSignedIn() && existing().sellerId == request.auth.uid;
+    }
+
+    // Bulk Demands collection rules
+    match /bulkDemands/{demandId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isSignedIn() && isValidId(demandId) && isValidDemand(incoming());
+      allow update: if isSignedIn() && existing().buyerId == request.auth.uid && isValidDemand(incoming()) &&
+                    incoming().buyerId == existing().buyerId;
+      allow delete: if isSignedIn() && existing().buyerId == request.auth.uid;
+    }
+
+    // Farm Parcels collection rules
+    match /farmParcels/{parcelId} {
+      allow get: if isSignedIn() && (resource == null || resource.data.ownerId == request.auth.uid);
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(parcelId) && isValidParcel(incoming());
+      allow update: if isSignedIn() && existing().ownerId == request.auth.uid && isValidParcel(incoming()) &&
+                    incoming().ownerId == existing().ownerId;
+      allow delete: if isSignedIn() && existing().ownerId == request.auth.uid;
+    }
+
+    // Google Slides Decks metadata collection rules
+    match /slideDecks/{deckId} {
+      allow get: if isSignedIn() && (resource == null || resource.data.ownerId == request.auth.uid);
+      allow list: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(deckId) && isValidSlideDeck(incoming());
+      allow update: if isSignedIn() && existing().ownerId == request.auth.uid && isValidSlideDeck(incoming()) &&
+                    incoming().ownerId == existing().ownerId;
+      allow delete: if isSignedIn() && existing().ownerId == request.auth.uid;
+    }
+  }
+}

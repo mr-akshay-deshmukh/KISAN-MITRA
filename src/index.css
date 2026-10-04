@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0F1411;
+    color: #E5E9E7;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', 'Newsreader', Georgia, serif;
+  }
+}
+
+/* Custom scrollbar for mobile feel with Artistic Flair theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0F1411;
+}
+::-webkit-scrollbar-thumb {
+  background: #2C3631;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C2D66E;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Artistic Flair voice waveforms */
+@keyframes voice-wave {
+  0%, 100% { height: 8px; }
+  50% { height: 28px; }
+}
+
+.animate-wave-1 { animation: voice-wave 1.2s ease-in-out infinite 0.1s; }
+.animate-wave-2 { animation: voice-wave 1.2s ease-in-out infinite 0.3s; }
+.animate-wave-3 { animation: voice-wave 1.2s ease-in-out infinite 0.2s; }
+.animate-wave-4 { animation: voice-wave 1.2s ease-in-out infinite 0.4s; }
+.animate-wave-5 { animation: voice-wave 1.2s ease-in-out infinite 0.15s; }
+
+/* Hide browser default blue credentials & autofill overlay icons */
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credit-card-auto-fill-button {
+  visibility: hidden !important;
+  display: none !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #E5E9E7 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #242C28 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
