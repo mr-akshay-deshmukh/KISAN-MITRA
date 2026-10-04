@@ -282,5 +282,5 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more informa
 
 - **Project Lead**: KisanMitra Open Source Initiative
 - **Issue Tracker**: [GitHub Issues](https://github.com/your-username/kisanmitra-agri-marketplace/issues)
-- **Email Contact**: `engineeringstudies5@gmail.com` gmail message
+- **Email Team
 
