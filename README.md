@@ -9,7 +9,7 @@
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable_%26_Offline-5A0FC8?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> **Empowering 140M+ Indian Farmers with Direct SuperMart Procurement, AI Crop Diagnostics, Logistics Route Optimization, and Multilingual Voice AI.**
+> **Empowering 100+ Million Indian Farmers with Direct SuperMart Procurement, AI Crop Diagnostics, Logistics Route Optimization, and Multilingual Voice AI.**
 
 ---
 
